@@ -13,6 +13,7 @@ typedef struct {
     int adjacentMines;
 } Cell;
 
+// this function is used for the initilization of every board members
 void initBoard( Cell board[ROWS][COLS]){
     for(int i=0;i<ROWS;i++){
         for (int  j = 0; j < COLS; j++)
@@ -25,18 +26,16 @@ void initBoard( Cell board[ROWS][COLS]){
         
     }
 }
-
+// this function is used for display 9*9 board for playing
 void printBoard(Cell board[ROWS][COLS])
 {
      for(int i=0;i<ROWS;i++){
         for (int  j = 0; j < COLS; j++)
         {
-            if(board[i][j].isMine==1){
-                printf("*");
-
-            }
+            if (board[i][j].isMine == 1)
+                printf("* ");
             else
-            printf(".");
+                printf("%d ", board[i][j].adjacentMines);
          
             /* code */
         }
@@ -46,6 +45,7 @@ void printBoard(Cell board[ROWS][COLS])
 
 }
 
+// this function is used for placing 10 random mines using rand and srand. 
 void placeMines(Cell board[ROWS][COLS])
 {
     int placed=0;
@@ -63,6 +63,51 @@ void placeMines(Cell board[ROWS][COLS])
 
 }
 
+int isValid(int r, int c)
+{
+    if(r< ROWS && c< COLS && c>=0 && r>=0)
+        return 1;
+    
+    else
+        return 0;
+}
+
+void countAdjacent(Cell board[ROWS][COLS])
+{
+
+    for(int i=0;i<ROWS;i++)
+    {
+        for(int j=0;j< COLS;j++)
+        {
+            if(board[i][j].isMine==1)
+                continue;
+            
+            int minesCount=0;
+
+            for(int mi=-1;mi<=1;mi++)
+            {
+                for(int mj=-1;mj<=1;mj++)
+                {
+                    if(isValid(i+mi,j+mj))
+                    {
+                        if(mi==0 && mj==0)
+                            continue;
+
+                        else if(board[i+mi][j+mj].isMine==1)
+                            minesCount++;
+
+                    }
+
+                }
+
+            }
+            board[i][j].adjacentMines = minesCount;
+
+        }
+    }
+
+}
+
 
 int main()
 {
@@ -70,12 +115,7 @@ int main()
     srand(time(NULL));
     initBoard(board);
     placeMines(board);
+    countAdjacent(board);
     printBoard(board);
-    int count = 0;
-for (int i = 0; i < ROWS; i++)
-    for (int j = 0; j < COLS; j++)
-        if (board[i][j].isMine == 1)
-            count++;
-printf("\nMines placed: %d\n", count);
     return 0;
 }
