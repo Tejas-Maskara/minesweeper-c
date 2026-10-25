@@ -133,7 +133,7 @@ int main()
     initBoard(board);
     placeMines(board);
     countAdjacent(board);
-    printBoard(board);
+    // printBoard(board);-> use it when debugging
 
     int row, col;
     int revealedCount = 0;
@@ -142,7 +142,7 @@ int main()
         int result, ch;
 
         printPlayerView(board);
-        printf("Enter rows and coloumns");
+        printf("Enter rows and columns");
         result = scanf("%d %d", &row, &col);
         while ((ch = getchar()) != '\n' && ch != EOF)
             ;
