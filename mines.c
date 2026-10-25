@@ -86,6 +86,28 @@ void countAdjacent(Cell board[ROWS][COLS])
         }
     }
 }
+void reveal(Cell board[][COLS], int r, int c, int *count)
+{
+    if (!isValid(r, c)) {
+        return;
+    }
+    if (board[r][c].isRevealed == 1) {
+        return;
+    } else {
+        board[r][c].isRevealed = 1;
+        (*count)++;
+    }
+
+    if (board[r][c].adjacentMines > 0) {
+        return;
+    } else {
+        for (int mi = -1; mi <= 1; mi++) {
+            for (int mj = -1; mj <= 1; mj++) {
+                reveal(board, r + mi, c + mj, count);
+            }
+        }
+    }
+}
 
 void printPlayerView(Cell board[ROWS][COLS])
 {
@@ -133,17 +155,18 @@ int main()
         col = col - 1;
 
         if (!isValid(row, col)) {
-            printf("OUT OF RANGE MAX INPUT=%d \n", ROWS - 1);
+            printf("OUT OF RANGE MAX INPUT=%d \n", ROWS);
             continue;
         }
         if (board[row][col].isRevealed == 0) {
-            board[row][col].isRevealed = 1;
+
             if (board[row][col].isMine == 1) {
+                board[row][col].isRevealed = 1;
                 printf("Game over\n");
                 gameOver = 1;
 
             } else
-                revealedCount++;
+                reveal(board, row, col, &revealedCount);
 
         } else {
             printf("Already revealed\n");
