@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ROWS 9
-#define COLS 9
-#define MINES 10
+#define ROWS 3
+#define COLS 3
+#define MINES 1
 
 typedef struct {
     int isMine;
@@ -114,24 +114,46 @@ int main()
     printBoard(board);
 
     int row, col;
-    while (1) {
+    int revealedCount = 0;
+    int gameOver = 0;
+    while (!gameOver) {
         int result, ch;
+
         printPlayerView(board);
         printf("Enter rows and coloumns");
         result = scanf("%d %d", &row, &col);
         while ((ch = getchar()) != '\n' && ch != EOF)
             ;
+
         if (result != 2) {
             printf("invalid input\n");
             continue;
         }
+        row = row - 1;
+        col = col - 1;
 
         if (!isValid(row, col)) {
             printf("OUT OF RANGE MAX INPUT=%d \n", ROWS - 1);
             continue;
         }
+        if (board[row][col].isRevealed == 0) {
+            board[row][col].isRevealed = 1;
+            if (board[row][col].isMine == 1) {
+                printf("Game over\n");
+                gameOver = 1;
 
-        board[row][col].isRevealed = 1;
+            } else
+                revealedCount++;
+
+        } else {
+            printf("Already revealed\n");
+            continue;
+        }
+        if (revealedCount == (ROWS * COLS - MINES)) {
+            printf("winner\n");
+            gameOver = 1;
+        }
     }
+    printBoard(board);
     return 0;
 }
