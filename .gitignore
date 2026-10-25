@@ -1,3 +1,9 @@
 *.exe
 *.out
 a.out
+# Microsoft compiler (cl.exe) build files
+*.obj
+*.pdb
+*.ilk
+# C/C++ Runner build output
+build/
