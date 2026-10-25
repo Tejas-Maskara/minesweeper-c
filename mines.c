@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ROWS 3
-#define COLS 3
-#define MINES 1
+#define ROWS 9
+#define COLS 9
+#define MINES 10
 
 typedef struct {
     int isMine;
